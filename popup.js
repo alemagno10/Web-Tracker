@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultsSection = document.getElementById('results');
 
   analyzeButton.addEventListener('click', () => {
-    resultsSection.classList.remove('hidden');
+    resultsSection.classList.add('visible');
     privacyScoreElement.textContent = '';
     canvasFingerprintingInfo.textContent = '';
 

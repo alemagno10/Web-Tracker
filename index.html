@@ -7,28 +7,42 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h3>WebTracKer - Security Analysis</h3>
+  <div class="container">
+    <h2>WebTracKer - Security Analysis</h2>
 
-  <button id="analyzeButton">Run Analysis</button>
+    <button id="analyzeButton" class="analyze-btn">Run Analysis</button>
 
-  <div id="results" class="hidden">
-    <h3>Third-Party Connections</h3>
-    <ul id="connectionList"></ul>
+    <div id="results" class="results hidden">
+      <div class="info-section">
+        <h3>Third-Party Connections</h3>
+        <ul id="connectionList" class="info-list"></ul>
+      </div>
 
-    <h3>Cookies</h3>
-    <div id="cookieInfo"></div>
+      <div class="info-section">
+        <h3>Cookies</h3>
+        <p id="cookieInfo" class="info-item"></p>
+      </div>
 
-    <h3>Local Storage</h3>
-    <div id="localStorageInfo"></div>
+      <div class="info-section">
+        <h3>Local Storage</h3>
+        <p id="localStorageInfo" class="info-item"></p>
+      </div>
 
-    <h3>Session Storage</h3>
-    <div id="sessionStorageInfo"></div>
+      <div class="info-section">
+        <h3>Session Storage</h3>
+        <p id="sessionStorageInfo" class="info-item"></p>
+      </div>
 
-    <h3>Canvas Fingerprinting</h3>
-    <div id="canvasFingerprintingInfo"></div> 
+      <div class="info-section">
+        <h3>Canvas Fingerprinting</h3>
+        <p id="canvasFingerprintingInfo" class="info-item"></p>
+      </div>
 
-    <h3>Privacy Score</h3>
-    <div id="privacyScore"></div> 
+      <div class="info-section">
+        <h3>Privacy Score</h3>
+        <p id="privacyScore" class="privacy-score"></p>
+      </div>
+    </div>
   </div>
 
   <script src="popup.js"></script>
