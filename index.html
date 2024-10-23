@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,12 +7,12 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h3>WebTracKer - Análise de Segurança</h3>
+  <h3>WebTracKer - Security Analysis</h3>
 
-  <button id="analyzeButton">Executar Análises</button>
+  <button id="analyzeButton">Run Analysis</button>
 
   <div id="results" class="hidden">
-    <h3>Conexões de Terceiros</h3>
+    <h3>Third-Party Connections</h3>
     <ul id="connectionList"></ul>
 
     <h3>Cookies</h3>
@@ -23,6 +23,12 @@
 
     <h3>Session Storage</h3>
     <div id="sessionStorageInfo"></div>
+
+    <h3>Canvas Fingerprinting</h3>
+    <div id="canvasFingerprintingInfo"></div> 
+
+    <h3>Privacy Score</h3>
+    <div id="privacyScore"></div> 
   </div>
 
   <script src="popup.js"></script>

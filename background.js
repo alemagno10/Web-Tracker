@@ -39,20 +39,10 @@ chrome.webRequest.onCompleted.addListener((details) => {
   });
 }, { urls: ["<all_urls>"] });
 
-chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
-  chrome.storage.local.get('tabConnections', (result) => {
-    let tabConnections = result.tabConnections || {};
-    if (tabConnections[tabId]) {
-      delete tabConnections[tabId];
-      chrome.storage.local.set({ tabConnections: tabConnections });
-    }
-  });
-});
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === "storageData") {
-    const tabId = sender.tab.id;
+  const tabId = sender.tab.id;
 
+  if (message.type === "storageData") {
     chrome.storage.local.get({ storageData: {} }, (result) => {
       let storageData = result.storageData || {};
       storageData[tabId] = {
@@ -62,9 +52,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
       chrome.storage.local.set({ storageData: storageData });
     });
-  } else if (message.type === "canvasFingerprinting") {
-    chrome.storage.local.set({ canvasFingerprintingDetected: true });
+  } else if (message.type === "canvasFingerprintingDetected") {
+    chrome.storage.local.get({ canvasFingerprinting: {} }, (result) => {
+      let canvasFingerprinting = result.canvasFingerprinting || {};
+      canvasFingerprinting[tabId] = true;
+
+      chrome.storage.local.set({ canvasFingerprinting: canvasFingerprinting });
+    });
   }
 });
-
-
