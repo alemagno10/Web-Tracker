@@ -1,6 +1,6 @@
 # Web-Tracker
 
-WebTracKer é uma extensão de navegador que rastreia conexões de terceiros em websites, detecta possíveis ameaças de sequestro de navegador (hijacking), monitora o armazenamento local (localStorage e sessionStorage) e fornece informações sobre cookies e técnicas de fingerprinting como o uso de Canvas.
+WebTracKer é uma extensão para Google Chrome que rastreia conexões de terceiros em websites, detecta possíveis ameaças de sequestro de navegador (hijacking), monitora o armazenamento local (localStorage e sessionStorage) e fornece informações sobre cookies e técnicas de fingerprinting como o uso de Canvas.
 
 ## Funcionalidades
 - Monitoramento de Conexões de Terceiros: Detecta e lista todas as conexões feitas para domínios de terceiros enquanto você navega.
