@@ -1,19 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <title>Third-Party Connections</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebTracKer</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h3>Third-Party Connections</h3>
-  <ul id="connectionList"></ul>
-  <!-- <button id="clearButton">Clear List</button> -->
+  <h3>WebTracKer - Análise de Segurança</h3>
 
-  <h3>Local Storage</h3>
-  <ul id="localStorageList"></ul>
+  <button id="analyzeButton">Executar Análises</button>
 
-  <h3>Session Storage</h3>
-  <ul id="sessionStorageList"></ul>
+  <div id="results" class="hidden">
+    <h3>Conexões de Terceiros</h3>
+    <ul id="connectionList"></ul>
+
+    <h3>Cookies</h3>
+    <div id="cookieInfo"></div>
+
+    <h3>Local Storage</h3>
+    <div id="localStorageInfo"></div>
+
+    <h3>Session Storage</h3>
+    <div id="sessionStorageInfo"></div>
+  </div>
 
   <script src="popup.js"></script>
 </body>

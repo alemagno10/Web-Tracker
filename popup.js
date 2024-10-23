@@ -1,81 +1,78 @@
 document.addEventListener('DOMContentLoaded', () => {
-  let connectionList = document.getElementById('connectionList');
-  let clearButton = document.getElementById('clearButton');
+  const connectionList = document.getElementById('connectionList');
+  const cookieInfo = document.getElementById('cookieInfo');
+  const localStorageInfo = document.getElementById('localStorageInfo');
+  const sessionStorageInfo = document.getElementById('sessionStorageInfo');
+  const analyzeButton = document.getElementById('analyzeButton');
+  const resultsSection = document.getElementById('results');
 
-  // Get the currently active tab
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs.length > 0) {
-      let activeTab = tabs[0];
+  analyzeButton.addEventListener('click', () => {
+    // Exibe a seção de resultados ao clicar no botão
+    resultsSection.classList.remove('hidden');
 
-      // Load third-party connections for this tab
-      chrome.storage.local.get('tabConnections', (result) => {
-        let tabConnections = result.tabConnections || {};
-        let connections = tabConnections[activeTab.id]?.connections || [];
+    // Limpa os resultados anteriores
+    connectionList.innerHTML = '';
+    cookieInfo.textContent = 'Analisando cookies...';
+    localStorageInfo.textContent = 'Analisando localStorage...';
+    sessionStorageInfo.textContent = 'Analisando sessionStorage...';
 
-        // Display the third-party connections for the current tab
-        connections.forEach((connection) => {
-          let li = document.createElement('li');
-          li.textContent = connection;
-          connectionList.appendChild(li);
-        });
-      });
-    }
-  });
-
-  // Clear the stored connections for the active tab
-  clearButton.addEventListener('click', () => {
+    // Analisar Conexões de Terceiros
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length > 0) {
-        let activeTab = tabs[0];
+        const activeTab = tabs[0];
 
-        // Clear the connections for the current tab
         chrome.storage.local.get('tabConnections', (result) => {
-          let tabConnections = result.tabConnections || {};
-          if (tabConnections[activeTab.id]) {
-            tabConnections[activeTab.id].connections = [];
-            chrome.storage.local.set({ tabConnections: tabConnections }, () => {
-              connectionList.innerHTML = ''; // Clear the UI
+          const tabConnections = result.tabConnections || {};
+          const connections = tabConnections[activeTab.id]?.connections || [];
+
+          if (connections.length > 0) {
+            connections.forEach((connection) => {
+              const li = document.createElement('li');
+              li.textContent = connection;
+              connectionList.appendChild(li);
             });
+          } else {
+            const li = document.createElement('li');
+            li.textContent = 'Nenhuma conexão de terceiros detectada.';
+            connectionList.appendChild(li);
           }
         });
       }
     });
-  });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-  const localStorageList = document.getElementById('localStorageList');
-  const sessionStorageList = document.getElementById('sessionStorageList');
+    // Analisar Cookies
+    chrome.storage.local.get(['firstPartyCookiesCount', 'thirdPartyCookiesCount'], (result) => {
+      const hasFirstPartyCookies = result.firstPartyCookiesCount > 0;
+      const hasThirdPartyCookies = result.thirdPartyCookiesCount > 0;
 
-  // Get the current active tab
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs.length > 0) {
-      const activeTabId = tabs[0].id;
+      cookieInfo.textContent = hasFirstPartyCookies || hasThirdPartyCookies
+        ? 'Cookies detectados.'
+        : 'Nenhum cookie detectado.';
+    });
 
-      // Load the storage data for the active tab
-      chrome.storage.local.get('storageData', (result) => {
-        const storageData = result.storageData || {};
-        const tabStorage = storageData[activeTabId];
+    // Analisar localStorage
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs.length > 0) {
+        const activeTabId = tabs[0].id;
 
-        if (tabStorage) {
-          const { localStorage, sessionStorage } = tabStorage;
+        chrome.storage.local.get('storageData', (result) => {
+          const storageData = result.storageData || {};
+          const tabStorage = storageData[activeTabId];
 
-          // Display localStorage data
-          for (const [key, value] of Object.entries(localStorage)) {
-            const li = document.createElement('li');
-            li.textContent = `${key}: ${value}`;
-            localStorageList.appendChild(li);
+          if (tabStorage && Object.keys(tabStorage.localStorage).length > 0) {
+            localStorageInfo.textContent = 'Local Storage presente.';
+          } else {
+            localStorageInfo.textContent = 'Nenhum Local Storage detectado.';
           }
 
-          // Display sessionStorage data
-          for (const [key, value] of Object.entries(sessionStorage)) {
-            const li = document.createElement('li');
-            li.textContent = `${key}: ${value}`;
-            sessionStorageList.appendChild(li);
+          if (tabStorage && Object.keys(tabStorage.sessionStorage).length > 0) {
+            sessionStorageInfo.textContent = 'Session Storage presente.';
+          } else {
+            sessionStorageInfo.textContent = 'Nenhum Session Storage detectado.';
           }
-        }
-      });
-    }
+        });
+      }
+    });
   });
 });
 

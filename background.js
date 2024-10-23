@@ -1,4 +1,5 @@
-chrome.webRequest.onBeforeRequest.addListener((details) => {
+chrome.webRequest.onBeforeRequest.addListener(
+  (details) => {
     let requestUrl = new URL(details.url);
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length > 0) {
@@ -26,6 +27,18 @@ chrome.webRequest.onBeforeRequest.addListener((details) => {
   { urls: ["<all_urls>"] }
 );
 
+chrome.webRequest.onCompleted.addListener((details) => {
+  chrome.cookies.getAll({ url: details.url }, (cookies) => {
+    const firstPartyCookies = cookies.filter(cookie => cookie.domain.includes(details.initiator));
+    const thirdPartyCookies = cookies.filter(cookie => !cookie.domain.includes(details.initiator));
+
+    chrome.storage.local.set({
+      firstPartyCookiesCount: firstPartyCookies.length,
+      thirdPartyCookiesCount: thirdPartyCookies.length,
+    });
+  });
+}, { urls: ["<all_urls>"] });
+
 chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
   chrome.storage.local.get('tabConnections', (result) => {
     let tabConnections = result.tabConnections || {};
@@ -47,8 +60,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sessionStorage: message.sessionStorage
       };
 
-      // Save the updated storage data
       chrome.storage.local.set({ storageData: storageData });
     });
+  } else if (message.type === "canvasFingerprinting") {
+    chrome.storage.local.set({ canvasFingerprintingDetected: true });
   }
 });
+
+
